@@ -77,7 +77,7 @@ sub main {
 	 );	
     
     if (!defined $infile) {
-	&usage("L'option --entree est obligatoire");
+	$infile = "-";
     }
 
     if (defined $tagger) {
@@ -96,12 +96,16 @@ sub main {
     $lemm=new Flemm(%params);
 	
     if (!defined $outfile) {
-	$outfile = $infile.".lemm";
+	if ($infile != "-") {
+		$outfile = $infile.".lemm";
+	} else {
+		$outfile = "-";
+	}
     } 
 
-    open(INPUT,"$infile") || die "pas possible d'ouvrir $infile";
+    open(INPUT,"<$infile") || die "pas possible d'ouvrir $infile";
     open(OUTPUT,">$outfile") || die "pas possible de créer $outfile";
- 
+
     if ($format eq "xml") {
 	print OUTPUT "<?xml version='1.0' encoding='ISO-8859-1'?>\n\n";
 	print OUTPUT "<FlemmResults>\n";
